@@ -1,0 +1,64 @@
+const cells = document.querySelectorAll('.cell');
+let currentPlayer = 'X';
+let gameEnded = false;
+
+// Add click event listener to each cell
+cells.forEach(cell => {
+    cell.addEventListener('click', () => {
+        // Check if the cell is already taken or the game has ended
+        if (cell.innerHTML !== '' || gameEnded) {
+            return;
+        }
+        
+        // Update the cell with the current player's mark and color
+        cell.innerHTML = currentPlayer;
+        cell.classList.add(`player-${currentPlayer.toLowerCase()}`);
+        
+        // Check if the current player has won
+        if (checkWin(currentPlayer)) {
+            document.getElementById('result').innerHTML = `${currentPlayer} wins!`;
+            gameEnded = true;
+            return;
+        }
+        
+        // Check if the game is a tie
+        if (checkTie()) {
+            document.getElementById('result').innerHTML = 'Tie game!';
+            gameEnded = true;
+            return;
+        }
+        
+        // Switch to the other player
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+    });
+});
+
+// Check if the current player has won
+function checkWin(player) {
+    // Check horizontal rows
+    for (let i = 0; i < 9; i += 3) {
+        if (cells[i].innerHTML === player && cells[i + 1].innerHTML === player && cells[i + 2].innerHTML === player) {
+            return true;
+        }
+    }
+    
+    // Check vertical columns
+    for (let i = 0; i < 3; i++) {
+        if (cells[i].innerHTML === player && cells[i + 3].innerHTML === player && cells[i + 6].innerHTML === player) {
+            return true;
+        }
+    }
+    
+    // Check diagonal lines
+    if (cells[0].innerHTML === player && cells[4].innerHTML === player && cells[8].innerHTML === player) {
+        return true;
+    }
+    
+    if (cells[2].innerHTML === player && cells[4].innerHTML === player && cells[6].innerHTML === player) {
+        return true;
+    }
+    
+    return false;
+}
+
+// Check if the
